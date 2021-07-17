@@ -2,9 +2,17 @@ version: '3'
 
 services:
   db:
-    image: postgres
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+    ports:
+      - '5306:3306'
+    env_file: .db-env
+    # TODO: my.cnfのvolume化を検討
+    # https://qiita.com/k8uwall/items/79dbe6dd03aa8b0ed119
+    command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --default-authentication-plugin=mysql_native_password
     volumes:
-      - postgres-data:/var/lib/postgresql/data
+      - mysql-data:/var/lib/mysql
   api:
     build:
       context: ./api/
