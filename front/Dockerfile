@@ -1,2 +1,2 @@
-FROM node:8.16.0-alpine
+FROM node:lts-alpine
 WORKDIR /usr/src/app
