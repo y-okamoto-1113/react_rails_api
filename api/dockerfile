@@ -1,3 +1,32 @@
+FROM ruby:2.6.6
+ENV BUILD_PACKAGES="curl vim less nodejs yarn" \
+    DEV_PACKAGES="ffmpeg" \
+    RAILS_ENV="development"
+
+RUN wget --quiet -O - /tmp/pubkey.gpg https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
+    && echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list \
+    && apt-get update -qq \
+    && apt-get install -y $BUILD_PACKAGES $DEV_PACKAGES \
+    && yarn add jquery bootstrap popper.js select2 \
+    && yarn install --check-files
+WORKDIR /icey
+COPY Gemfile /icey/Gemfile
+COPY Gemfile.lock /icey/Gemfile.lock
+RUN bundle install
+RUN rails action_text:install
+COPY . /icey
+
+# puma.sockを配置するディレクトリを作成
+RUN mkdir -p tmp/sockets
+
+VOLUME /icey/public
+VOLUME /icey/tmp
+
+
+
+
+
+
 FROM ruby:2.5
 RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
 RUN mkdir /myapp
