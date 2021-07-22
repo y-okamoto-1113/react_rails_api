@@ -13,6 +13,8 @@ services:
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --default-authentication-plugin=mysql_native_password
     volumes:
       - mysql-data:/var/lib/mysql
+      # TODO: MySQLのエラーログ設定がうまくいかない
+      # - mysql-log:/var/log/mysql/mysql-error.log
   api:
     build:
       context: .
@@ -47,3 +49,4 @@ services:
 volumes:
   mysql-data:
     driver: local
+  mysql-log:
