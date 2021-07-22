@@ -9,8 +9,8 @@ RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add - \
     && apt-get update -qq \
     && apt-get install -y $BUILD_PACKAGES
 WORKDIR /myapp
-COPY Gemfile /myapp/Gemfile
-COPY Gemfile.lock /myapp/Gemfile.lock
+COPY ./api/Gemfile /myapp/Gemfile
+COPY ./api/Gemfile.lock /myapp/Gemfile.lock
 RUN bundle install
 RUN rails action_text:install
 COPY . /myapp
