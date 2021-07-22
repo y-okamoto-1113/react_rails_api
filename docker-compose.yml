@@ -2,12 +2,12 @@ version: '3'
 
 services:
   db:
-    image: mysql:8.0
-    environment:
-      MYSQL_ROOT_PASSWORD: password
+    build:
+      context: .
+      dockerfile: ./db/Dockerfile
+    env_file: ./db/.db-env
     ports:
       - '5306:3306'
-    env_file: .db-env
     # TODO: my.cnfのvolume化を検討
     # https://qiita.com/k8uwall/items/79dbe6dd03aa8b0ed119
     command: mysqld --character-set-server=utf8mb4 --collation-server=utf8mb4_general_ci --default-authentication-plugin=mysql_native_password
@@ -15,27 +15,27 @@ services:
       - mysql-data:/var/lib/mysql
   api:
     build:
-      context: ./api/
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./api/Dockerfile
+    env_file: ./api/.rails-env
     command: /bin/sh -c "rm -f /myapp/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
     volumes:
       - ./api:/myapp
       - ./api/vendor/bundle:/myapp/vendor/bundle
-    env_file: ./api/.rails-env
     ports:
       - 3000:3000
     depends_on:
       - db
   front:
     build:
-      context: ./front/
-      dockerfile: Dockerfile
+      context: .
+      dockerfile: ./front/Dockerfile
+    env_file: ./front/.react-env
     command: sh -c "cd react-sample && yarn start"
     volumes:
       - ./front:/usr/src/app
-    env_file: ./front/.react-env
     ports:
       - "8000:3000"
 volumes:
-  postgres-data:
+  mysql-data:
     driver: local
