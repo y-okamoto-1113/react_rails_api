@@ -26,6 +26,14 @@ services:
       - 3000:3000
     depends_on:
       - db
+    stdin_open: true
+    tty: true
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    ports:
+      - "80:80"
   front:
     build:
       context: .
