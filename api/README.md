@@ -21,5 +21,9 @@ Things you may want to cover:
 
 * Deployment instructions
 - docker-compose run api rails new . --force --no-deps --database=mysql --api
+- docker-compose run front yarn create-react-app react-app --template typescript
 
 * ...
+
+
+<!-- rails api, puma, nginx, react, mysql, docker -->
