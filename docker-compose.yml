@@ -42,7 +42,7 @@ services:
       context: .
       dockerfile: ./front/Dockerfile
     env_file: ./front/.react-env
-    command: sh -c "cd react-sample && yarn start"
+    command: sh -c "cd react-ts-app && yarn start"
     volumes:
       - ./front:/usr/src/app
     ports:

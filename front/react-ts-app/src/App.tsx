@@ -1,4 +1,5 @@
-import React from 'react';
+// in React 17, We No Longer Import React!
+// https://github.com/microsoft/TypeScript/issues/41882#issuecomment-754099534
 import logo from './logo.svg';
 import './App.css';
 
