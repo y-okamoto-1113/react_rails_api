@@ -1,0 +1,4 @@
+# Initialization
+RAILS_ENV=development
+TZ=Asia/Tokyo
+

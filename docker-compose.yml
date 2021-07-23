@@ -1,0 +1,55 @@
+version: '3'
+
+services:
+  db:
+    build:
+      context: .
+      dockerfile: ./db/Dockerfile
+    env_file: ./db/.db-env
+    ports:
+      - '3306:3306'
+    # TODO: my.cnfのvolume化を検討
+    # https://qiita.com/k8uwall/items/79dbe6dd03aa8b0ed119
+    volumes:
+      - mysql-data:/var/lib/mysql
+      # TODO: MySQLのエラーログ設定がうまくいかない
+      # - mysql-log:/var/log/mysql/mysql-error.log
+  api:
+    build:
+      context: .
+      dockerfile: ./api/Dockerfile
+    env_file: ./api/.rails-env
+    command: /bin/sh -c "rm -f /myapp/tmp/pids/server.pid && bundle exec rails s -p 3000 -b '0.0.0.0'"
+    volumes:
+      - ./api:/myapp
+      - ./api/vendor/bundle:/myapp/vendor/bundle
+    ports:
+      - 3000:3000
+    depends_on:
+      - db
+    stdin_open: true
+    tty: true
+  web:
+    build:
+      context: .
+      dockerfile: ./web/Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+  front:
+    build:
+      context: .
+      dockerfile: ./front/Dockerfile
+    env_file: ./front/.react-env
+    command: sh -c "cd react-sample && yarn start"
+    volumes:
+      - ./front:/usr/src/app
+    ports:
+      - "8000:3000"
+    depends_on:
+      - api
+volumes:
+  mysql-data:
+    driver: local
+  mysql-log:
