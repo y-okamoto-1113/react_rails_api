@@ -1,5 +1,0 @@
-
-MYSQL_USERNAME=root
-MYSQL_ROOT_PASSWORD=password
-MYSQL_PASSWORD=password
-MYSQL_DATABASE=myapp_development
